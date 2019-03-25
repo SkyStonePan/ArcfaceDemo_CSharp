@@ -114,14 +114,15 @@ namespace ArcSoftFace.Utils
         /// <param name="age">年龄</param>
         /// <param name="gender">性别</param>
         /// <returns>标记后的图片</returns>
-        public static Image MarkRectAndString(Image image, int startX, int startY, int width, int height, int age, int gender)
+        public static Image MarkRectAndString(Image image, int startX, int startY, int width, int height, int age, int gender,int showWidth)
         {
             Image clone = (Image)image.Clone();
             Graphics g = Graphics.FromImage(clone);
             try
             {
                 Brush brush = new SolidBrush(Color.Red);
-                Pen pen = new Pen(brush, 2);
+                int penWidth = image.Width / showWidth;
+                Pen pen = new Pen(brush, penWidth > 1? 2* penWidth:2);
                 pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                 g.DrawRectangle(pen, new Rectangle(startX < 1 ? 0 : startX, startY < 1 ? 0 : startY, width, height));
                 string genderStr = "";
@@ -136,7 +137,22 @@ namespace ArcSoftFace.Utils
                         genderStr = "女";
                     }
                 }
-                g.DrawString(string.Format("Age:{0}   Gender:{1}", age, genderStr), new Font(FontFamily.GenericSerif, 12), brush, startX < 1?0:startX, (startY - 20)< 1?0: startY - 20);
+                int fontSize = image.Width / showWidth;
+                if (fontSize > 1)
+                {
+                    int temp = 12;
+                    for (int i = 0; i < fontSize; i++)
+                    {
+                        temp += 6;
+                    }
+                    fontSize = temp;
+                } else if (fontSize == 1) {
+                    fontSize = 14;
+                } else
+                {
+                    fontSize = 12;
+                }
+                g.DrawString(string.Format("Age:{0}   Gender:{1}", age, genderStr), new Font(FontFamily.GenericSerif, fontSize), brush, startX < 1?0:startX, (startY - 20)< 1?0: startY - 20);
 
                 return clone;
             }
@@ -165,41 +181,7 @@ namespace ArcSoftFace.Utils
             try
             {
                 //按比例缩放           
-                float scaleRate = 0.0f;
-                if (image.Width >= dstWidth && image.Height >= dstHeight)
-                {
-                    int widthDis = image.Width - dstWidth;
-                    int heightDis = image.Height - dstHeight;
-                    if (widthDis > heightDis)
-                    {
-                        scaleRate = dstWidth * 1f / image.Width;
-                    }
-                    else
-                    {
-                        scaleRate = dstHeight * 1f / image.Height;
-                    }
-                }
-                else if (image.Width >= dstWidth && image.Height < dstHeight)
-                {
-                    scaleRate = dstWidth * 1f / image.Width;
-                }
-                else if (image.Width < dstWidth && image.Height >= dstHeight)
-                {
-                    scaleRate = dstHeight * 1f / image.Height;
-                }
-                else
-                {
-                    int widthDis = dstWidth - image.Width;
-                    int heightDis = dstHeight - image.Height;
-                    if (widthDis > heightDis)
-                    {
-                        scaleRate = dstHeight * 1f / image.Height;
-                    }
-                    else
-                    {
-                        scaleRate = dstWidth * 1f / image.Width;
-                    }
-                }
+                float scaleRate = getWidthAndHeight(image.Width, image.Height, dstWidth, dstHeight);
                 int width = (int)(image.Width * scaleRate);
                 int height = (int)(image.Height * scaleRate);
 
@@ -243,6 +225,55 @@ namespace ArcSoftFace.Utils
         }
 
         /// <summary>
+        /// 获取图片缩放比例
+        /// </summary>
+        /// <param name="oldWidth">原图片宽</param>
+        /// <param name="oldHeigt">原图片高</param>
+        /// <param name="newWidth">目标图片宽</param>
+        /// <param name="newHeight">目标图片高</param>
+        /// <returns></returns>
+        public static float getWidthAndHeight(int oldWidth,int oldHeigt,int newWidth,int newHeight)
+        {
+            //按比例缩放           
+            float scaleRate = 0.0f;
+            if (oldWidth >= newWidth && oldHeigt >= newHeight)
+            {
+                int widthDis = oldWidth - newWidth;
+                int heightDis = oldHeigt - newHeight;
+                if (widthDis > heightDis)
+                {
+                    scaleRate = newWidth * 1f / oldWidth;
+                }
+                else
+                {
+                    scaleRate = newHeight * 1f / oldHeigt;
+                }
+            }
+            else if (oldWidth >= newWidth && oldHeigt < newHeight)
+            {
+                scaleRate = newWidth * 1f / oldWidth;
+            }
+            else if (oldWidth < newWidth && oldHeigt >= newHeight)
+            {
+                scaleRate = newHeight * 1f / oldHeigt;
+            }
+            else
+            {
+                int widthDis = newWidth - oldWidth;
+                int heightDis = newHeight - oldHeigt;
+                if (widthDis > heightDis)
+                {
+                    scaleRate = newHeight * 1f / oldHeigt;
+                }
+                else
+                {
+                    scaleRate = newWidth * 1f / oldWidth;
+                }
+            }
+            return scaleRate;
+        }
+
+        /// <summary>
         /// 剪裁图片
         /// </summary>
         /// <param name="src">原图片</param>
@@ -265,5 +296,7 @@ namespace ArcSoftFace.Utils
             }
             return null;
         }
+
+
     }
 }

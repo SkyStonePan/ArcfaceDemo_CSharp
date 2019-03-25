@@ -41,6 +41,10 @@
             this.btnClearFaceList = new System.Windows.Forms.Button();
             this.lblCompareImage = new System.Windows.Forms.Label();
             this.lblCompareInfo = new System.Windows.Forms.Label();
+            this.videoSource = new AForge.Controls.VideoSourcePlayer();
+            this.btnStartVideo = new System.Windows.Forms.Button();
+            this.txtThreshold = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picImageCompare)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,7 +54,7 @@
             this.picImageCompare.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.picImageCompare.Location = new System.Drawing.Point(603, 37);
             this.picImageCompare.Name = "picImageCompare";
-            this.picImageCompare.Size = new System.Drawing.Size(306, 362);
+            this.picImageCompare.Size = new System.Drawing.Size(494, 362);
             this.picImageCompare.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.picImageCompare.TabIndex = 1;
             this.picImageCompare.TabStop = false;
@@ -83,7 +87,7 @@
             this.logBox.Name = "logBox";
             this.logBox.ReadOnly = true;
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logBox.Size = new System.Drawing.Size(895, 135);
+            this.logBox.Size = new System.Drawing.Size(1083, 139);
             this.logBox.TabIndex = 31;
             // 
             // chooseImgBtn
@@ -91,7 +95,7 @@
             this.chooseImgBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.chooseImgBtn.Location = new System.Drawing.Point(603, 431);
             this.chooseImgBtn.Name = "chooseImgBtn";
-            this.chooseImgBtn.Size = new System.Drawing.Size(120, 26);
+            this.chooseImgBtn.Size = new System.Drawing.Size(109, 26);
             this.chooseImgBtn.TabIndex = 30;
             this.chooseImgBtn.Text = "选择识别图";
             this.chooseImgBtn.UseVisualStyleBackColor = true;
@@ -115,9 +119,9 @@
             // matchBtn
             // 
             this.matchBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.matchBtn.Location = new System.Drawing.Point(781, 431);
+            this.matchBtn.Location = new System.Drawing.Point(748, 431);
             this.matchBtn.Name = "matchBtn";
-            this.matchBtn.Size = new System.Drawing.Size(128, 26);
+            this.matchBtn.Size = new System.Drawing.Size(104, 26);
             this.matchBtn.TabIndex = 34;
             this.matchBtn.Text = "开始匹配";
             this.matchBtn.UseVisualStyleBackColor = true;
@@ -152,11 +156,58 @@
             this.lblCompareInfo.Size = new System.Drawing.Size(0, 16);
             this.lblCompareInfo.TabIndex = 37;
             // 
+            // videoSource
+            // 
+            this.videoSource.Location = new System.Drawing.Point(603, 37);
+            this.videoSource.Name = "videoSource";
+            this.videoSource.Size = new System.Drawing.Size(494, 362);
+            this.videoSource.TabIndex = 38;
+            this.videoSource.Text = "videoSource";
+            this.videoSource.VideoSource = null;
+            this.videoSource.Paint += new System.Windows.Forms.PaintEventHandler(this.videoSource_Paint);
+            // 
+            // btnStartVideo
+            // 
+            this.btnStartVideo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStartVideo.Location = new System.Drawing.Point(883, 431);
+            this.btnStartVideo.Name = "btnStartVideo";
+            this.btnStartVideo.Size = new System.Drawing.Size(107, 26);
+            this.btnStartVideo.TabIndex = 39;
+            this.btnStartVideo.Text = "启用摄像头";
+            this.btnStartVideo.UseVisualStyleBackColor = true;
+            this.btnStartVideo.Click += new System.EventHandler(this.btnStartVideo_Click);
+            // 
+            // txtThreshold
+            // 
+            this.txtThreshold.BackColor = System.Drawing.SystemColors.Window;
+            this.txtThreshold.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtThreshold.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtThreshold.Location = new System.Drawing.Point(1037, 431);
+            this.txtThreshold.Name = "txtThreshold";
+            this.txtThreshold.Size = new System.Drawing.Size(60, 25);
+            this.txtThreshold.TabIndex = 40;
+            this.txtThreshold.Text = "0.8";
+            this.txtThreshold.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtThreshold_KeyPress);
+            this.txtThreshold.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtThreshold_KeyUp);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(996, 436);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 12);
+            this.label1.TabIndex = 41;
+            this.label1.Text = "阈值：";
+            // 
             // FaceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(927, 628);
+            this.ClientSize = new System.Drawing.Size(1115, 633);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtThreshold);
+            this.Controls.Add(this.btnStartVideo);
+            this.Controls.Add(this.videoSource);
             this.Controls.Add(this.lblCompareInfo);
             this.Controls.Add(this.lblCompareImage);
             this.Controls.Add(this.btnClearFaceList);
@@ -194,6 +245,10 @@
         private System.Windows.Forms.Button btnClearFaceList;
         private System.Windows.Forms.Label lblCompareImage;
         private System.Windows.Forms.Label lblCompareInfo;
+        private AForge.Controls.VideoSourcePlayer videoSource;
+        private System.Windows.Forms.Button btnStartVideo;
+        private System.Windows.Forms.TextBox txtThreshold;
+        private System.Windows.Forms.Label label1;
     }
 }
 
